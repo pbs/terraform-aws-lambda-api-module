@@ -1,0 +1,8 @@
+.terraform
+.DS_Store
+target
+CHANGELOG.md
+*.tfstate
+*.tfstate.backup
+examples/artifacts/*
+!examples/artifacts/.gitignore
