@@ -6,7 +6,7 @@
 
 ```hcl
 module "lambda-api" {
-    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.0.1"
+    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.0.2"
 }
 ```
 
@@ -22,7 +22,7 @@ Integrate this module like so:
 
 ```hcl
 module "api" {
-  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.0.1"
+  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.0.2"
 
   handler  = "main"
   filename = "../artifacts/handler.zip"
@@ -44,7 +44,7 @@ module "api" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.0.1`
+`0.0.2`
 
 Note, however that subtrees can be altered as desired within repositories.
 
