@@ -1,4 +1,3 @@
-data "aws_caller_identity" "current" {}
 data "aws_acm_certificate" "wildcard" {
   count  = var.acm_arn == null ? 1 : 0
   domain = "*.${var.primary_hosted_zone}"
