@@ -80,12 +80,13 @@ resource "aws_apigatewayv2_api_mapping" "alternate_domain_api_mapping" {
 }
 
 resource "aws_apigatewayv2_integration" "integration" {
-  api_id             = aws_apigatewayv2_api.api.id
-  integration_type   = var.integration_type
-  connection_type    = var.connection_type
-  description        = local.integration_description
-  integration_method = var.integration_method
-  integration_uri    = module.lambda.invoke_arn
+  api_id                 = aws_apigatewayv2_api.api.id
+  integration_type       = var.integration_type
+  connection_type        = var.connection_type
+  description            = local.integration_description
+  integration_method     = var.integration_method
+  integration_uri        = module.lambda.invoke_arn
+  payload_format_version = var.payload_format_version
 }
 
 resource "aws_apigatewayv2_route" "route" {

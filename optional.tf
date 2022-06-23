@@ -111,3 +111,9 @@ variable "disable_execute_api_endpoint" {
   default     = true
   type        = bool
 }
+
+variable "payload_format_version" {
+  description = "(optional) payload format version"
+  default     = "1.0"
+  type        = string
+}
