@@ -6,7 +6,7 @@
 
 ```hcl
 module "lambda-api" {
-    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.0.3"
+    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z"
 }
 ```
 
@@ -22,7 +22,7 @@ Integrate this module like so:
 
 ```hcl
 module "api" {
-  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.0.3"
+  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z"
 
   handler  = "main"
   filename = "../artifacts/handler.zip"
@@ -44,7 +44,7 @@ module "api" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.0.3`
+`x.y.z`
 
 Note, however that subtrees can be altered as desired within repositories.
 
@@ -73,7 +73,7 @@ Below is automatically generated documentation on this Terraform module using [t
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | github.com/pbs/terraform-aws-lambda-module | 0.0.2 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | github.com/pbs/terraform-aws-lambda-module | 0.0.4 |
 
 ## Resources
 
@@ -127,6 +127,7 @@ Below is automatically generated documentation on this Terraform module using [t
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | Number of days to retain CloudWatch Log entries | `number` | `7` | no |
 | <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | Amount of memory in MB your Lambda Function can use at runtime | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the API | `string` | `null` | no |
+| <a name="input_payload_format_version"></a> [payload\_format\_version](#input\_payload\_format\_version) | (optional) payload format version | `string` | `"1.0"` | no |
 | <a name="input_policy_json"></a> [policy\_json](#input\_policy\_json) | Policy JSON. If null, default policy granting access to SSM and cloudwatch logs is used | `string` | `null` | no |
 | <a name="input_primary_hosted_zone"></a> [primary\_hosted\_zone](#input\_primary\_hosted\_zone) | Primary hosted zone for the API. e.g. example.org | `string` | `null` | no |
 | <a name="input_protocol_type"></a> [protocol\_type](#input\_protocol\_type) | Protocol type. Can be HTTP and WEBSOCKET | `string` | `"HTTP"` | no |
