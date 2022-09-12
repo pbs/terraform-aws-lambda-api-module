@@ -22,3 +22,8 @@ output "alternate_domain_endpoint" {
   description = "Alternate endpoint that the API can be accessed at if a CNAME corresponding to `alternate_domain_name` resolves to this endpoint. Only populated if `alternate_domain_name` is not null"
   value       = local.create_alternate_domain_name ? aws_apigatewayv2_domain_name.alternate_domain_name[0].domain_name_configuration[0].target_domain_name : null
 }
+
+output "sg" {
+  description = "Security group of the lambda function if there is one"
+  value       = module.lambda.sg
+}
