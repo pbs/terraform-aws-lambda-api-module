@@ -117,3 +117,15 @@ variable "payload_format_version" {
   default     = "1.0"
   type        = string
 }
+
+variable "throttling_burst_limit" {
+  description = "(optional) throttling burst limit"
+  default     = 5000
+  type        = number
+}
+
+variable "throttling_rate_limit" {
+  description = "(optional) throttling rate limit"
+  default     = 10000
+  type        = number
+}

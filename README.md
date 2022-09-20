@@ -6,7 +6,7 @@
 
 ```hcl
 module "lambda-api" {
-    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.2.0"
+    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z"
 }
 ```
 
@@ -22,7 +22,7 @@ Integrate this module like so:
 
 ```hcl
 module "api" {
-  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.2.0"
+  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z"
 
   handler  = "main"
   filename = "../artifacts/handler.zip"
@@ -44,7 +44,7 @@ module "api" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.2.0`
+`x.y.z`
 
 Note, however that subtrees can be altered as desired within repositories.
 
@@ -139,6 +139,8 @@ Below is automatically generated documentation on this Terraform module using [t
 | <a name="input_stage_name"></a> [stage\_name](#input\_stage\_name) | Name of the stage | `string` | `"$default"` | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | Subnets to use for the Lambda function. Ignored if add\_vpc\_config is false. If null, one will be looked up based on environment tag. | `list(string)` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Extra tags | `map(string)` | `{}` | no |
+| <a name="input_throttling_burst_limit"></a> [throttling\_burst\_limit](#input\_throttling\_burst\_limit) | (optional) throttling burst limit | `number` | `5000` | no |
+| <a name="input_throttling_rate_limit"></a> [throttling\_rate\_limit](#input\_throttling\_rate\_limit) | (optional) throttling rate limit | `number` | `10000` | no |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | Timeout in seconds of the Lambda | `number` | `3` | no |
 | <a name="input_tracing_config_mode"></a> [tracing\_config\_mode](#input\_tracing\_config\_mode) | Tracing config mode for X-Ray integration on Lambda | `string` | `"Active"` | no |
 | <a name="input_use_prefix"></a> [use\_prefix](#input\_use\_prefix) | Use prefix for resources instead of explicitly defining whole name where possible | `bool` | `true` | no |
