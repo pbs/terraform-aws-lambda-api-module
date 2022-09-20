@@ -57,6 +57,11 @@ resource "aws_apigatewayv2_stage" "stage" {
   name        = var.stage_name
   auto_deploy = var.auto_deploy
 
+  default_route_settings {
+    throttling_burst_limit = var.throttling_burst_limit
+    throttling_rate_limit  = var.throttling_rate_limit
+  }
+
   tags = merge(
     local.tags,
     {
