@@ -17,7 +17,6 @@ module "lambda" {
   publish                 = var.publish
   policy_json             = var.policy_json
   layers                  = var.layers
-  lambda_insights_version = var.lambda_insights_version
   tracing_config_mode     = var.tracing_config_mode
   use_prefix              = var.use_prefix
   architectures           = var.architectures
