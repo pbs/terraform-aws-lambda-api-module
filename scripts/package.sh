@@ -6,6 +6,9 @@ IFS=$'\n\t'
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 
-pushd "$GIT_ROOT"/examples/src > /dev/null
-GOOS=linux go build -o "$GIT_ROOT"/examples/artifacts/main .
+pushd "$GIT_ROOT"/examples/src >/dev/null
+GOOS=linux GOARCH=amd64 go build -o "$GIT_ROOT"/examples/artifacts/main
 zip -j "$GIT_ROOT"/examples/artifacts/handler.zip "$GIT_ROOT"/examples/artifacts/main
+
+GOOS=linux GOARCH=arm64 go build -o "$GIT_ROOT"/examples/artifacts/main
+zip -j "$GIT_ROOT"/examples/artifacts/arm-handler.zip "$GIT_ROOT"/examples/artifacts/main

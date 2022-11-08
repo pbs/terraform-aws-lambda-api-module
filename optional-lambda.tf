@@ -52,16 +52,52 @@ variable "policy_json" {
   type        = string
 }
 
+variable "permissions_boundary_arn" {
+  description = "ARN of the permissions boundary to use on the role created for this lambda"
+  default     = null
+  type        = string
+}
+
 variable "layers" {
   description = "Lambda layers to apply to function. If null, a Lambda Layer extension is added by default."
   default     = null
   type        = list(string)
 }
 
-variable "lambda_insights_version" {
+variable "lambda_insights_extension_version" {
   description = "Lambda layer version for the LambdaInsightsExtension layer"
   default     = null
   type        = number
+}
+
+variable "lambda_insights_extension_account_number" {
+  description = "Account number for the LambdaInsightsExtension layer"
+  default     = "580247275435"
+  type        = string
+}
+
+variable "parameters_and_secrets_extension_version" {
+  description = "Lambda layer version for the AWS-Parameters-and-Secrets-Lambda-Extension layer"
+  default     = null
+  type        = number
+}
+
+variable "parameters_and_secrets_extension_account_number" {
+  description = "Account number for the AWS-Parameters-and-Secrets-Lambda-Extension layer"
+  default     = "177933569100"
+  type        = string
+}
+
+variable "app_config_extension_version" {
+  description = "Lambda layer version for the AWS-AppConfig-Extension layer"
+  default     = null
+  type        = number
+}
+
+variable "app_config_extension_account_number" {
+  description = "Account number for the AWS-AppConfig-Extension layer"
+  default     = "027255383542"
+  type        = string
 }
 
 variable "tracing_config_mode" {
@@ -114,4 +150,28 @@ variable "subnets" {
   description = "Subnets to use for the Lambda function. Ignored if add_vpc_config is false. If null, one will be looked up based on environment tag."
   default     = null
   type        = list(string)
+}
+
+variable "ssm_path" {
+  description = "SSM path to use for environment variables. If null, defaults to /$${var.environment}/$${local.name}"
+  default     = null
+  type        = string
+}
+
+variable "add_ssm_extension_layer" {
+  description = "Add the AWS-Parameters-and-Secrets-Lambda-Extension layer to the Lambda function. Ignored if layers is not null or if using the ARM runtime."
+  default     = true
+  type        = bool
+}
+
+variable "add_app_config_extension_layer" {
+  description = "Add the AWS-AppConfig-Lambda-Extension layer to the Lambda function. Ignored if layers is not null or if runtime is not supported."
+  default     = true
+  type        = bool
+}
+
+variable "allow_app_config_access" {
+  description = "Allow AppConfig access from the Lambda function. Ignored if `policy_json` or `role_arn` are set."
+  default     = true
+  type        = bool
 }
