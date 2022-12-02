@@ -1,7 +1,6 @@
 package test
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -42,6 +41,8 @@ func testLambdaAPI(t *testing.T, variant string) {
 
 	terraform.Init(t, terraformOptions)
 
+	dockerResponse := ""
+
 	if variant == "docker" {
 		ecrTargetTerraformOptions := &terraform.Options{
 			TerraformDir: terraformDir,
@@ -76,17 +77,7 @@ func testLambdaAPI(t *testing.T, variant string) {
 		docker.Run(t, tag, runOptions)
 		defer docker.Stop(t, []string{variant}, &docker.StopOptions{Time: 5, Logger: logger})
 
-		payload := []byte(`{}`)
-
-		req, err := http.NewRequest("POST", "http://localhost:8080/2015-03-31/functions/function/invocations", bytes.NewBuffer(payload))
-
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		req.Header.Set("Content-Type", "application/json")
-
-		resp, err := http.DefaultClient.Do(req)
+		resp, err := http.Get("http://localhost:8080/")
 
 		if err != nil {
 			t.Fatal(err)
@@ -103,6 +94,8 @@ func testLambdaAPI(t *testing.T, variant string) {
 		}
 
 		assert.NotNil(t, body)
+
+		dockerResponse = string(body)
 
 		docker.Push(t, logger, tag)
 	}
@@ -133,14 +126,26 @@ func testLambdaAPI(t *testing.T, variant string) {
 	domainName := terraform.Output(t, terraformOptions, "domain_name")
 	assert.Equal(t, expectedDomainName, domainName)
 
+	baseURL := fmt.Sprintf("https://%s", domainName)
 	statusURL := fmt.Sprintf("https://%s/status", domainName)
 	expectedStatus := "ok"
 
 	if variant != "docker" {
 		httpHelper.HttpGetWithRetry(t, statusURL, nil, 200, expectedStatus, 60, 5*time.Second)
 	} else {
-		httpHelper.HttpGetWithCustomValidation(t, statusURL, nil, 200, func(statusCode int, body string) bool {
-			return statusCode == 200 && body != ""
-		}, 60, 5*time.Second)
+		resp, err := http.Get(baseURL)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if resp.StatusCode != 200 {
+			t.Fatalf("Expected 200, got %d", resp.StatusCode)
+		}
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+		assert.NotNil(t, body)
+		assert.Equal(t, dockerResponse, string(body))
 	}
 }
