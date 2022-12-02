@@ -1,10 +1,11 @@
 module "lambda" {
-  source = "github.com/pbs/terraform-aws-lambda-module?ref=0.3.0"
+  source = "github.com/pbs/terraform-aws-lambda-module?ref=993a9219ba5798bc1c007c44d7559cadd171e1a5"
 
   # Required
-  handler  = var.handler
-  filename = var.filename
-  runtime  = var.runtime
+  handler   = var.handler
+  filename  = var.filename
+  runtime   = var.runtime
+  image_uri = var.image_uri
 
   # Optional
   name                  = local.lambda_name
@@ -25,6 +26,7 @@ module "lambda" {
   add_vpc_config        = var.add_vpc_config
   security_group_id     = var.security_group_id
   subnets               = var.subnets
+  package_type          = var.package_type
 
   permissions_boundary_arn                        = var.permissions_boundary_arn
   lambda_insights_extension_version               = var.lambda_insights_extension_version

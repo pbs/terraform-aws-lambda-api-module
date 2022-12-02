@@ -1,13 +1,17 @@
 package test
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"testing"
 	"time"
 
+	"github.com/gruntwork-io/terratest/modules/docker"
 	httpHelper "github.com/gruntwork-io/terratest/modules/http-helper"
-
+	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 )
@@ -36,7 +40,74 @@ func testLambdaAPI(t *testing.T, variant string) {
 	logGroupName := fmt.Sprintf("/aws/lambda/%s", expectedName)
 	deleteLogGroup(t, logGroupName)
 
-	terraform.InitAndApply(t, terraformOptions)
+	terraform.Init(t, terraformOptions)
+
+	if variant == "docker" {
+		ecrTargetTerraformOptions := &terraform.Options{
+			TerraformDir: terraformDir,
+			LockTimeout:  "5m",
+			Targets:      []string{"module.ecr"},
+		}
+
+		terraform.Apply(t, ecrTargetTerraformOptions)
+
+		ecrRepo := terraform.Output(t, ecrTargetTerraformOptions, "ecr_repo_url")
+
+		tag := fmt.Sprintf("%s:latest", ecrRepo)
+		buildOptions := &docker.BuildOptions{
+			Tags: []string{tag},
+		}
+
+		docker.Build(t, "../examples/src-docker", buildOptions)
+
+		// We can test the image locally before pushing it to ECR
+
+		logger := logger.Terratest
+
+		runOptions := &docker.RunOptions{
+			Remove: true,
+			Detach: true,
+			Name:   variant,
+			OtherOptions: []string{
+				"-p", "8080:8080",
+			},
+		}
+
+		docker.Run(t, tag, runOptions)
+		defer docker.Stop(t, []string{variant}, &docker.StopOptions{Time: 5, Logger: logger})
+
+		payload := []byte(`{}`)
+
+		req, err := http.NewRequest("POST", "http://localhost:8080/2015-03-31/functions/function/invocations", bytes.NewBuffer(payload))
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := http.DefaultClient.Do(req)
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		defer resp.Body.Close()
+
+		assert.Equal(t, 200, resp.StatusCode)
+
+		body, err := ioutil.ReadAll(resp.Body)
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		assert.NotNil(t, body)
+
+		docker.Push(t, logger, tag)
+	}
+
+	terraform.Apply(t, terraformOptions)
 
 	region := getAWSRegion(t)
 
@@ -65,5 +136,11 @@ func testLambdaAPI(t *testing.T, variant string) {
 	statusURL := fmt.Sprintf("https://%s/status", domainName)
 	expectedStatus := "ok"
 
-	httpHelper.HttpGetWithRetry(t, statusURL, nil, 200, expectedStatus, 60, 5*time.Second)
+	if variant != "docker" {
+		httpHelper.HttpGetWithRetry(t, statusURL, nil, 200, expectedStatus, 60, 5*time.Second)
+	} else {
+		httpHelper.HttpGetWithCustomValidation(t, statusURL, nil, 200, func(statusCode int, body string) bool {
+			return statusCode == 200 && body != ""
+		}, 60, 5*time.Second)
+	}
 }
