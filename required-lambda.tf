@@ -1,6 +1,6 @@
 # These are required for zip file based lambdas
 variable "handler" {
-  description = "Cloudwatch event pattern"
+  description = "Lambda handler"
   type        = string
   default     = null
 }

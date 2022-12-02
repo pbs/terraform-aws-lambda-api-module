@@ -121,7 +121,7 @@ Below is automatically generated documentation on this Terraform module using [t
 | <a name="input_environment_vars"></a> [environment\_vars](#input\_environment\_vars) | Map of environment variables for the Lambda. If null, defaults to setting an SSM\_PATH based on the environment and name of the function. Set to {} if you would like for there to be no environment variables present. This is important if you are creating a Lambda@Edge. | `map(any)` | `null` | no |
 | <a name="input_file_system_config"></a> [file\_system\_config](#input\_file\_system\_config) | File system configuration for the Lambda function | `map(any)` | `null` | no |
 | <a name="input_filename"></a> [filename](#input\_filename) | Filename for the artifact to use for the Lambda | `string` | `null` | no |
-| <a name="input_handler"></a> [handler](#input\_handler) | Cloudwatch event pattern | `string` | `null` | no |
+| <a name="input_handler"></a> [handler](#input\_handler) | Lambda handler | `string` | `null` | no |
 | <a name="input_image_uri"></a> [image\_uri](#input\_image\_uri) | URI of the container image to use for the Lambda | `string` | `null` | no |
 | <a name="input_integration_description"></a> [integration\_description](#input\_integration\_description) | Integration description. Auto-generated off local.name if null | `string` | `null` | no |
 | <a name="input_integration_method"></a> [integration\_method](#input\_integration\_method) | Integration method. Leave this POST | `string` | `"POST"` | no |
