@@ -4,10 +4,10 @@
 
 ### Using the Repo Source
 
+Use this URL for the source of the module. See the usage examples below for more details.
+
 ```hcl
-module "lambda-api" {
-    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z"
-}
+github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
