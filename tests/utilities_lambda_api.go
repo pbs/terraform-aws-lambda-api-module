@@ -80,7 +80,17 @@ func testLambdaAPI(t *testing.T, variant string) {
 		resp, err := http.Get("http://localhost:8080/")
 
 		if err != nil {
-			t.Fatal(err)
+			for i := 0; i < 10; i++ {
+				t.Log("Waiting for container to start...")
+				time.Sleep(1 * time.Second)
+				resp, err = http.Get("http://localhost:8080/")
+				if err == nil {
+					break
+				}
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
 		}
 
 		defer resp.Body.Close()
@@ -134,6 +144,21 @@ func testLambdaAPI(t *testing.T, variant string) {
 		httpHelper.HttpGetWithRetry(t, statusURL, nil, 200, expectedStatus, 60, 5*time.Second)
 	} else {
 		resp, err := http.Get(baseURL)
+
+		if err != nil {
+			for i := 0; i < 30; i++ {
+				t.Log("Waiting for API to be available...")
+				time.Sleep(1 * time.Second)
+				resp, err = http.Get(baseURL)
+				if err == nil {
+					break
+				}
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+		}
+
 		if err != nil {
 			t.Fatal(err)
 		}
