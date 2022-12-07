@@ -4,10 +4,10 @@
 
 ### Using the Repo Source
 
+Use this URL for the source of the module. See the usage examples below for more details.
+
 ```hcl
-module "lambda-api" {
-    source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.4.0"
-}
+github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -22,7 +22,7 @@ Integrate this module like so:
 
 ```hcl
 module "api" {
-  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.4.0"
+  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z"
 
   handler  = "main"
   filename = "../artifacts/handler.zip"
@@ -44,7 +44,7 @@ module "api" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.4.0`
+`x.y.z`
 
 Note, however that subtrees can be altered as desired within repositories.
 
@@ -60,7 +60,7 @@ Below is automatically generated documentation on this Terraform module using [t
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1.7 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.2 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.5.0 |
 
 ## Providers
@@ -73,7 +73,7 @@ Below is automatically generated documentation on this Terraform module using [t
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | github.com/pbs/terraform-aws-lambda-module | 0.3.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | github.com/pbs/terraform-aws-lambda-module | 1.3.0 |
 
 ## Resources
 
@@ -90,19 +90,17 @@ Below is automatically generated documentation on this Terraform module using [t
 | [aws_lambda_permission.lambda_permission](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_route53_record.record](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [aws_acm_certificate.wildcard](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/acm_certificate) | data source |
+| [aws_default_tags.common_tags](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/default_tags) | data source |
 | [aws_route53_zone.zone](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment (sharedtools, dev, staging, prod) | `string` | n/a | yes |
-| <a name="input_filename"></a> [filename](#input\_filename) | Filename for the artifact to use for the Lambda | `string` | n/a | yes |
-| <a name="input_handler"></a> [handler](#input\_handler) | Lambda handler | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment (sharedtools, dev, staging, qa, prod) | `string` | n/a | yes |
 | <a name="input_organization"></a> [organization](#input\_organization) | Organization using this module. Used to prefix tags so that they are easily identified as being from your organization | `string` | n/a | yes |
 | <a name="input_product"></a> [product](#input\_product) | Tag used to group resources according to product | `string` | n/a | yes |
 | <a name="input_repo"></a> [repo](#input\_repo) | Tag used to point to the repo using this module | `string` | n/a | yes |
-| <a name="input_runtime"></a> [runtime](#input\_runtime) | Runtime for the lambda function | `string` | n/a | yes |
 | <a name="input_acm_arn"></a> [acm\_arn](#input\_acm\_arn) | ARN of the ACM certificate for the API integration | `string` | `null` | no |
 | <a name="input_add_app_config_extension_layer"></a> [add\_app\_config\_extension\_layer](#input\_add\_app\_config\_extension\_layer) | Add the AWS-AppConfig-Lambda-Extension layer to the Lambda function. Ignored if layers is not null or if runtime is not supported. | `bool` | `true` | no |
 | <a name="input_add_ssm_extension_layer"></a> [add\_ssm\_extension\_layer](#input\_add\_ssm\_extension\_layer) | Add the AWS-Parameters-and-Secrets-Lambda-Extension layer to the Lambda function. Ignored if layers is not null or if using the ARM runtime. | `bool` | `true` | no |
@@ -122,6 +120,9 @@ Below is automatically generated documentation on this Terraform module using [t
 | <a name="input_endpoint_type"></a> [endpoint\_type](#input\_endpoint\_type) | Endpoint type. Leave this REGIONAL | `string` | `"REGIONAL"` | no |
 | <a name="input_environment_vars"></a> [environment\_vars](#input\_environment\_vars) | Map of environment variables for the Lambda. If null, defaults to setting an SSM\_PATH based on the environment and name of the function. Set to {} if you would like for there to be no environment variables present. This is important if you are creating a Lambda@Edge. | `map(any)` | `null` | no |
 | <a name="input_file_system_config"></a> [file\_system\_config](#input\_file\_system\_config) | File system configuration for the Lambda function | `map(any)` | `null` | no |
+| <a name="input_filename"></a> [filename](#input\_filename) | Filename for the artifact to use for the Lambda | `string` | `null` | no |
+| <a name="input_handler"></a> [handler](#input\_handler) | Lambda handler | `string` | `null` | no |
+| <a name="input_image_uri"></a> [image\_uri](#input\_image\_uri) | URI of the container image to use for the Lambda | `string` | `null` | no |
 | <a name="input_integration_description"></a> [integration\_description](#input\_integration\_description) | Integration description. Auto-generated off local.name if null | `string` | `null` | no |
 | <a name="input_integration_method"></a> [integration\_method](#input\_integration\_method) | Integration method. Leave this POST | `string` | `"POST"` | no |
 | <a name="input_integration_type"></a> [integration\_type](#input\_integration\_type) | Integration type. Leave this AWS\_PROXY | `string` | `"AWS_PROXY"` | no |
@@ -133,6 +134,7 @@ Below is automatically generated documentation on this Terraform module using [t
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | Number of days to retain CloudWatch Log entries | `number` | `7` | no |
 | <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | Amount of memory in MB your Lambda Function can use at runtime | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the API | `string` | `null` | no |
+| <a name="input_package_type"></a> [package\_type](#input\_package\_type) | Package type for the Lambda function. Valid values are Zip and Image. | `string` | `"Zip"` | no |
 | <a name="input_parameters_and_secrets_extension_account_number"></a> [parameters\_and\_secrets\_extension\_account\_number](#input\_parameters\_and\_secrets\_extension\_account\_number) | Account number for the AWS-Parameters-and-Secrets-Lambda-Extension layer | `string` | `"177933569100"` | no |
 | <a name="input_parameters_and_secrets_extension_version"></a> [parameters\_and\_secrets\_extension\_version](#input\_parameters\_and\_secrets\_extension\_version) | Lambda layer version for the AWS-Parameters-and-Secrets-Lambda-Extension layer | `number` | `null` | no |
 | <a name="input_payload_format_version"></a> [payload\_format\_version](#input\_payload\_format\_version) | (optional) payload format version | `string` | `"1.0"` | no |
@@ -143,6 +145,7 @@ Below is automatically generated documentation on this Terraform module using [t
 | <a name="input_publish"></a> [publish](#input\_publish) | Whether to publish creation/change as new Lambda Function Version | `bool` | `true` | no |
 | <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | ARN of the role to be used for this Lambda | `string` | `null` | no |
 | <a name="input_route_key"></a> [route\_key](#input\_route\_key) | Route key. Leave this $default | `string` | `"$default"` | no |
+| <a name="input_runtime"></a> [runtime](#input\_runtime) | Runtime for the lambda function | `string` | `null` | no |
 | <a name="input_security_group_id"></a> [security\_group\_id](#input\_security\_group\_id) | Security group ID. If null, one will be created. | `string` | `null` | no |
 | <a name="input_security_policy"></a> [security\_policy](#input\_security\_policy) | TLS version. Leave this TLS\_1\_2 | `string` | `"TLS_1_2"` | no |
 | <a name="input_ssm_path"></a> [ssm\_path](#input\_ssm\_path) | SSM path to use for environment variables. If null, defaults to /${var.environment}/${local.name} | `string` | `null` | no |

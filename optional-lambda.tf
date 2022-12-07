@@ -175,3 +175,9 @@ variable "allow_app_config_access" {
   default     = true
   type        = bool
 }
+
+variable "package_type" {
+  description = "Package type for the Lambda function. Valid values are Zip and Image."
+  default     = "Zip"
+  type        = string
+}
