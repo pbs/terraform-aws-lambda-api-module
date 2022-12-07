@@ -1,5 +1,5 @@
 module "lambda" {
-  source = "github.com/pbs/terraform-aws-lambda-module?ref=993a9219ba5798bc1c007c44d7559cadd171e1a5"
+  source = "github.com/pbs/terraform-aws-lambda-module?ref=1.3.0"
 
   # Required
   handler   = var.handler

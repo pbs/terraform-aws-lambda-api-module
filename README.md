@@ -73,7 +73,7 @@ Below is automatically generated documentation on this Terraform module using [t
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | github.com/pbs/terraform-aws-lambda-module | 993a9219ba5798bc1c007c44d7559cadd171e1a5 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | github.com/pbs/terraform-aws-lambda-module | 1.3.0 |
 
 ## Resources
 
