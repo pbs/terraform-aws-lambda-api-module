@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-lambda-api-module?ref=0.5.0
+github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -22,7 +22,7 @@ Integrate this module like so:
 
 ```hcl
 module "api" {
-  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=0.5.0"
+  source = "github.com/pbs/terraform-aws-lambda-api-module?ref=x.y.z"
 
   handler  = "main"
   filename = "../artifacts/handler.zip"
@@ -44,7 +44,7 @@ module "api" {
 
 If this repo is added as a subtree, then the version of the module should be close to the version shown here:
 
-`0.5.0`
+`x.y.z`
 
 Note, however that subtrees can be altered as desired within repositories.
 
@@ -168,4 +168,5 @@ Below is automatically generated documentation on this Terraform module using [t
 | <a name="output_arn"></a> [arn](#output\_arn) | ARN of the API Gateway |
 | <a name="output_domain_name"></a> [domain\_name](#output\_domain\_name) | Domain name that the API can be accessed at. If create\_dns, return the CNAME created for the API, otherwise return the api integration domain name. This is useful when creating a DNS record for the API is not desired. |
 | <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | ARN of the Lambda function |
+| <a name="output_lambda_name"></a> [lambda\_name](#output\_lambda\_name) | Name of the Lambda function |
 | <a name="output_sg"></a> [sg](#output\_sg) | Security group of the lambda function if there is one |
