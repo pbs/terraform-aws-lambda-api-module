@@ -56,7 +56,11 @@ func testLambdaAPI(t *testing.T, variant string) {
 
 		tag := fmt.Sprintf("%s:latest", ecrRepo)
 		buildOptions := &docker.BuildOptions{
-			Tags: []string{tag},
+			Tags:          []string{tag},
+			Architectures: []string{"linux/arm64"},
+			OtherOptions: []string{
+				"--provenance", "false",
+			},
 		}
 
 		docker.Build(t, "../examples/src-docker", buildOptions)
